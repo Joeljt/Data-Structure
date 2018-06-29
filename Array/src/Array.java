@@ -111,9 +111,11 @@ public class Array<E> {
         }
 
         size --;
+        data[size] = null; // loitering objects != memory leak
 
         // 删除元素后，如果空余元素过多，同样进行动态缩减
-        if (size == data.length / 2){
+        // 数组长度为 1 时，不再进行缩减
+        if (size == data.length / 4 && data.length / 2 != 0){
             resize(data.length / 2);
         }
 
