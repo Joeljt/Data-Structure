@@ -41,6 +41,23 @@ public class LoopQueue<E> implements Queue<E> {
     @Override
     public void enqueue(E e) {
 
+        // front+1 取余数组长度
+        // 得到的就是下一个位置，如果与 front 相同，即 tail+1 == front，则表明队列满
+        if ((tail + 1) % data.length == front) {
+            resize(getCapacity() * 2);
+        }
+
+    }
+
+    private void resize(int newCapacity) {
+        E[] newData = (E[]) new Object[newCapacity + 1];
+        for (int i = 0; i < size; i++) {
+            newData[i] = data[(i + front) % data.length];
+        }
+        data = newData;
+        front = 0;
+        tail = size;
+
     }
 
     @Override
