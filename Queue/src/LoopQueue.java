@@ -47,6 +47,39 @@ public class LoopQueue<E> implements Queue<E> {
             resize(getCapacity() * 2);
         }
 
+        data[tail] = e;
+        tail = (tail + 1) % data.length;
+        size ++;
+
+    }
+
+    @Override
+    public E dequeue() {
+
+        if (isEmpty()) {
+            throw new IllegalArgumentException("Wrong");
+        }
+
+        E ret = data[front];
+        data[front] = null;
+        front = (front + 1) % data.length;
+        size--;
+
+        if (size == getCapacity() / 4 && getCapacity() / 2 != 0) {
+            resize(getCapacity() / 2);
+        }
+
+        return ret;
+    }
+
+    @Override
+    public E getFront() {
+
+        if (isEmpty()) {
+            throw new IllegalArgumentException("Wrong");
+        }
+
+        return data[front];
     }
 
     private void resize(int newCapacity) {
@@ -57,16 +90,20 @@ public class LoopQueue<E> implements Queue<E> {
         data = newData;
         front = 0;
         tail = size;
-
     }
 
     @Override
-    public E dequeue() {
-        return null;
-    }
-
-    @Override
-    public E getFront() {
-        return null;
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("Queue: size = %d, capacity = %d\n", size, getCapacity()));
+        builder.append("front [");
+        for (int i = front; i != tail; i = (i + 1) % data.length){
+            builder.append(data[i]);
+            if ((i + 1) % data.length != tail) {
+                builder.append(", ");
+            }
+        }
+        builder.append("] tail");
+        return builder.toString();
     }
 }
